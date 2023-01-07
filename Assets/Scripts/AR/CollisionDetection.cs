@@ -8,62 +8,50 @@ public class CollisionDetection : MonoBehaviour
 {
     private bool place = false;
     private int counter = 0;
-    private bool left = true;
-    private GameObject pref;
+    private float elapsed = 0;
+    private bool filled = false;
+    public Material seethrough;
+    private string player; 
 
-    private void OnTriggerEnter(Collider other)
+
+    BoardController parent;
+
+    private void Awake()
     {
-        left = false;
-        startTimer();
+        parent = GetComponentInParent<BoardController>();
     }
+
 
     private void OnTriggerStay(Collider other)
     {
-        if (place)
+        if (!filled)
         {
-            place = false;
-            counter = 0;
-
-            /**** V HIER DER CODE ZUR AUSFÜHRUNG DER INTERAKTION V ****/
-
-            // MUSS GLAUBE NOCH BEARBEITET WERDEN HABE NOCH NICHTS GETESTET
-            Place p = new Place(pref.GetComponent<Player>(), pref.GetComponent<Player>().getObj());
-            p.placeObject(other.gameObject);
-
+            elapsed += Time.deltaTime;
+            if (elapsed >= 1)
+            {
+                parent.applyMove(this.gameObject, other.gameObject);
+                Debug.Log("Placed");
+                elapsed = 0;
+                filled = true;
+            }
         }
+        
     }
 
-    private void OnTriggerExit(Collider other)
+    public string getPlayer()
     {
-        left = true;
+        return player;
     }
 
-    private void startTimer()
+    public void setPlayer(string player)
     {
-        if (counter == 0)
-        {
-            sleeper();
-        }
-        else
-        {
-            counter = 0;
-        }
+        this.player = player;
     }
 
-    private async void sleeper()
+    public void ResetGame()
     {
-        while (counter != 3000)
-        {
-            await Task.Delay(1);
-            if (left)
-                break;
-            counter++;
-        }
-        if (left)
-        {
-            left = false;
-            return;
-        }
-        place = true;
+        this.gameObject.GetComponent<MeshRenderer>().material = seethrough;
+        filled = false;
+        player = "";
     }
 }

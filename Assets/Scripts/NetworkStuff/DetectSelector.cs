@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DetectSelector : MonoBehaviour
 {
-    SpawnCube parent;
+    BoardController parent;
+    public Material seethrough;
 
     private void Awake()
     {
-        parent = GetComponentInParent<SpawnCube>();
+        parent = GetComponentInParent<BoardController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,4 +19,6 @@ public class DetectSelector : MonoBehaviour
         
         parent.applyMove(this.gameObject, other.gameObject);
     }
+
+    
 }

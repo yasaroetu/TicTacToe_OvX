@@ -39,31 +39,31 @@ public class SpawnCube : NetworkBehaviour
 
             Debug.Log(" i am player : " + NetworkClient.localPlayer.netId);
 
-            if(controller.getCurrentPlayer() == NetworkClient.localPlayer.netId)
-            {
-                return;
-            }
-            else
+            //if(controller.getCurrentPlayer() == NetworkClient.localPlayer.netId)
+            //{
+            //    return;
+            //}
+            //else
             {
                 Debug.Log("change Mat");
                 Debug.Log("current player from controller " + controller.getCurrentPlayer());
                 Debug.Log("current turn from controller " + controller.getCurrentTurn());
 
-                if (controller.getCurrentTurn() == 1)
+                //if (controller.getCurrentTurn() == 1)
                 {
                     field.gameObject.GetComponent<MeshRenderer>().material = X_Mat;
                     controller.switchTurn();
                     controller.switchPlayer(NetworkClient.localPlayer.netId);
                 }
 
-                if (controller.getCurrentTurn() == 2)
+                //if (controller.getCurrentTurn() == 2)
                 {
                     field.gameObject.GetComponent<MeshRenderer>().material = O_Mat;
                     controller.switchTurn();
                     controller.switchPlayer(NetworkClient.localPlayer.netId);
                 }
 
-                controller.printData();
+                //controller.printData();
             }
 
             
