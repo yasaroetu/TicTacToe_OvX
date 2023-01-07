@@ -6,8 +6,6 @@ using TMPro;
 
 public class CollisionDetection : MonoBehaviour
 {
-    private bool place = false;
-    private int counter = 0;
     private float elapsed = 0;
     private bool filled = false;
     public Material seethrough;
