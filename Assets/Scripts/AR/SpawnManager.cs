@@ -54,11 +54,11 @@ public class SpawnManager : MonoBehaviour
                 if (spawnedField != null)
                 {
                     spawnedField.transform.position = m_Hits[0].pose.position;
-                    spawnedField.transform.Rotate(new Vector3(90,0,0),Space.Self);
                 }
                 else
                 {
                     spawnedField = SpawnField(m_Hits[0].pose.position);
+                    spawnedField.transform.Rotate(new Vector3(90, 0, 0), Space.Self);
                     BoardController bc = spawnedField.GetComponentInChildren<BoardController>();
                     GameObject.Find("AR Session Origin").GetComponent<PlaceTrackedImages>().bc = bc;
                 }
