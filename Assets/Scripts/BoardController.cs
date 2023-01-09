@@ -11,7 +11,7 @@ public class BoardController : MonoBehaviour
 
     public GameObject[] playFields;
 
-    public GameObject selector;
+    private GameObject selector;
 
     private string playerSide;
     public GameObject gameOverPanel;
@@ -145,5 +145,8 @@ public class BoardController : MonoBehaviour
         restartButton.SetActive(false);
     }
 
-    
+    public void setSelector(GameObject sel)
+    {
+        this.selector = sel;
+    }
 }

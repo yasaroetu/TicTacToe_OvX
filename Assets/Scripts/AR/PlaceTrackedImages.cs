@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -10,13 +11,14 @@ using UnityEngine.XR.ARSubsystems;
 public class PlaceTrackedImages : MonoBehaviour {
     // Reference to AR tracked image manager component
     private ARTrackedImageManager _trackedImagesManager;
+    public BoardController bc;
 
     // List of prefabs to instantiate - these should be named the same
     // as their corresponding 2D images in the reference image library 
     public GameObject[] ArPrefabs;
 
     // Keep dictionary array of created prefabs
-    private readonly Dictionary<string, GameObject> _instantiatedPrefabs = new Dictionary<string, GameObject>();
+    public readonly Dictionary<string, GameObject> _instantiatedPrefabs = new Dictionary<string, GameObject>();
 
     void Awake() {
         // Cache a reference to the Tracked Image Manager component
@@ -35,7 +37,7 @@ public class PlaceTrackedImages : MonoBehaviour {
 
     // Event Handler
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs) {
-
+        if (bc == null) return;
         // Loop through all new tracked images that have been detected
         foreach (var trackedImage in eventArgs.added) {
             // Get the name of the reference image
@@ -48,6 +50,7 @@ public class PlaceTrackedImages : MonoBehaviour {
                     && !_instantiatedPrefabs.ContainsKey(imageName)) {
                     // Instantiate the prefab, parenting it to the ARTrackedImage
                     var newPrefab = Instantiate(curPrefab, trackedImage.transform);
+                    bc.setSelector(newPrefab);
                     // Add the created prefab to our array
                     _instantiatedPrefabs[imageName] = newPrefab;
                 }
@@ -59,6 +62,7 @@ public class PlaceTrackedImages : MonoBehaviour {
         foreach (var trackedImage in eventArgs.updated) {
             _instantiatedPrefabs[trackedImage.referenceImage.name]
                 .SetActive(trackedImage.trackingState == TrackingState.Tracking);
+
         }
 
         // If the AR subsystem has given up looking for a tracked image
