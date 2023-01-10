@@ -10,6 +10,9 @@ public class BoardController : MonoBehaviour
     private Material currentMat;
 
     public GameObject[] playFields;
+    public GameObject playFieldPrefab;
+    //[SyncVar]
+    public GameObject currentField;
 
     private GameObject selector;
 
@@ -29,18 +32,31 @@ public class BoardController : MonoBehaviour
         currentMat = X_Mat;
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
+        
+        //CmdSpawnFields();
     }
 
-    public void applyMove(GameObject field, GameObject selector)
+    public void applyMove(int indexOfField)
+    {
+        Debug.Log("Board: the field i have to swap is : " + indexOfField);
+        playFields[indexOfField].gameObject.GetComponent<MeshRenderer>().material = currentMat;
+        playFields[indexOfField].gameObject.GetComponent<CollisionDetection>().setPlayer(playerSide);
+        EndTurn();
+
+    }
+
+    public void startSelection(GameObject field, GameObject selector)
     {
         if (selector.gameObject.Equals(this.selector))
         {
-            field.gameObject.GetComponent<MeshRenderer>().material = currentMat;
-            field.gameObject.GetComponent<CollisionDetection>().setPlayer(playerSide);
-            EndTurn();
+            Debug.Log("starting selection");
+            int index = findFieldInArray(field);
+            Debug.Log("found field index : " + index);
+            GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+            controller.setFieldToSwitch(index);
         }
-        
     }
+
 
     public void EndTurn()
     {
@@ -149,4 +165,129 @@ public class BoardController : MonoBehaviour
     {
         this.selector = sel;
     }
+
+
+    private int findFieldInArray(GameObject field)
+    {
+        int fieldNumber = 0;
+        for(int i = 0; i<playFields.Length; i++)
+        {
+            if(playFields[i] == field)
+            {
+                fieldNumber = i;
+                break;
+            }
+        }
+        return fieldNumber;
+    }
+
+    //[Command(requiresAuthority = false)]
+    //public void CmdApplyMove( GameObject selector)
+    //{
+    //    RpcApplyMove(selector);
+    //}
+
+    //[ClientRpc]
+    //public void RpcApplyMove( GameObject selector)
+    //{
+    //    currentField.gameObject.GetComponent<MeshRenderer>().material = currentMat;
+    //    currentField.gameObject.GetComponent<CollisionDetection>().setPlayer(playerSide);
+    //    EndTurn();
+    //}
+
+    //[Command(requiresAuthority = false)]
+    //public void CmdSpawnFields()
+    //{
+    //    var field = Instantiate(playFieldPrefab);
+    //    playFields[0] = field;
+    //    field.transform.position += new Vector3(-20, 20, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[1] = field;
+    //    field.transform.position += new Vector3(0, 20, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[2] = field;
+    //    field.transform.position += new Vector3(20, 20, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[3] = field;
+    //    field.transform.position += new Vector3(-20, 0, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[4] = field;
+    //    field.transform.position += new Vector3(0, 0, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[5] = field;
+    //    field.transform.position += new Vector3(20, 0, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[6] = field;
+    //    field.transform.position += new Vector3(-20, -20, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[7] = field;
+    //    field.transform.position += new Vector3(0, -20, 0);
+    //    NetworkServer.Spawn(field);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[8] = field;
+    //    field.transform.position += new Vector3(20, -20, 0);
+    //    NetworkServer.Spawn(field);
+
+
+    //    foreach (GameObject item in playFields)
+    //    {
+    //        NetworkServer.Spawn(item);
+    //    }
+    //}
+
+    //[ClientRpc]
+    //public void RpcSpawnFields()
+    //{
+    //    var field = Instantiate(playFieldPrefab);
+    //    playFields[0] = field;
+    //    field.transform.position += new Vector3(-20, 20, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[1] = field;
+    //    field.transform.position += new Vector3(0, 20, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[2] = field;
+    //    field.transform.position += new Vector3(20, 20, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[3] = field;
+    //    field.transform.position += new Vector3(-20, 0, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[4] = field;
+    //    field.transform.position += new Vector3(0, 0, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[5] = field;
+    //    field.transform.position += new Vector3(20, 0, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[6] = field;
+    //    field.transform.position += new Vector3(-20, -20, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[7] = field;
+    //    field.transform.position += new Vector3(0, -20, 0);
+    //    field = Instantiate(playFieldPrefab);
+    //    playFields[8] = field;
+    //    field.transform.position += new Vector3(20, -20, 0);
+
+
+    //}
+
+    //[Command(requiresAuthority = false)]
+    //public void CmdSpawn()
+    //{
+    //    foreach(GameObject field in playFields)
+    //    {
+    //        NetworkServer.Spawn(field);
+    //    }
+    //}
+
+    //[Command(requiresAuthority = false)]
+    //public void CmdSetCurrentField(GameObject field)
+    //{
+    //    currentField = field;
+    //}
 }

@@ -15,6 +15,7 @@ public class MoveSelectorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.W)) 
         {
             myTransform.position = new Vector3(myTransform.position.x, myTransform.position.y+10, myTransform.position.z);
