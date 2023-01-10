@@ -146,6 +146,13 @@ public class BoardController : MonoBehaviour
         gameOverText.text = words;
     }
 
+    public void restart()
+    {
+        GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+        controller.restartGame();
+    }
+
+
     public void restartGame()
     {
         Debug.Log("Button pressed");

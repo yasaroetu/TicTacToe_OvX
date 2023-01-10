@@ -817,6 +817,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8018021571305504053, guid: c45252ad02ef1bd46b3b8795f394a113,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6434331700991459678}
+    - target: {fileID: 8018021571305504053, guid: c45252ad02ef1bd46b3b8795f394a113,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: restart
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c45252ad02ef1bd46b3b8795f394a113, type: 3}
 --- !u!224 &522239811915951140 stripped
