@@ -152,6 +152,7 @@ public class BoardController : MonoBehaviour
         }
         restartButton.SetActive(false);
         btnExit.SetActive(false);
+        GameObject.Find("AR Session Origin").GetComponent<SpawnManager>().getSpawnManagerCanvas().gameObject.SetActive(true);
     }
 
     public void setSelector(GameObject sel)
