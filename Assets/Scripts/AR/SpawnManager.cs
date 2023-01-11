@@ -5,6 +5,7 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -15,23 +16,27 @@ public class SpawnManager : MonoBehaviour
 
     public GameObject field;
     private GameObject spawnedField;
-    public Button btn;
+    public Canvas canPref;
+    private Canvas can;
 
     private ARPlaneManager plane;
 
-    public bool changePos = false;
+    private bool changePos = true;
+
+    private int counter = 200;
+    private bool taskRunning = false;
 
     private Camera cam;
 
     private void Start()
     {
+
         cam = GameObject.Find("AR Camera").GetComponent<Camera>();
         plane = GameObject.Find("AR Session Origin").GetComponent<ARPlaneManager>();
 
-        // Menue führung kann noch geändert werden
-        SpawnManagerButton btnM = btn.transform.gameObject.AddComponent(typeof(SpawnManagerButton)) as SpawnManagerButton;
-        btnM.btn = btn;
-        btnM.session = this;
+        can = Instantiate(canPref);
+        can.gameObject.SetActive(true);
+        setupButton();
     }
 
     private void FixedUpdate()
@@ -54,6 +59,7 @@ public class SpawnManager : MonoBehaviour
                 if (spawnedField != null)
                 {
                     spawnedField.transform.position = m_Hits[0].pose.position;
+                    placeTimer();
                 }
                 else
                 {
@@ -61,6 +67,7 @@ public class SpawnManager : MonoBehaviour
                     spawnedField.transform.Rotate(new Vector3(90, 0, 0), Space.Self);
                     BoardController bc = spawnedField.GetComponentInChildren<BoardController>();
                     GameObject.Find("AR Session Origin").GetComponent<PlaceTrackedImages>().bc = bc;
+                    changeMode();
                 }
             }
         }
@@ -76,5 +83,51 @@ public class SpawnManager : MonoBehaviour
     {
         foreach (var plane in plane.trackables)
             plane.gameObject.SetActive(false);
+    }
+    void changeMode()
+    {
+        changePos = !changePos;
+        // Menue führung kann noch geändert werden
+        can.transform.GetChild(0).gameObject.SetActive(changePos);
+        can.transform.GetChild(1).gameObject.SetActive(!changePos);
+        can.transform.GetChild(2).gameObject.SetActive(!changePos);
+    }
+
+    void setupButton()
+    {
+        Button btnSet = can.transform.GetChild(1).GetComponent<Button>();
+        btnSet.onClick.AddListener(changeMode);
+
+        Button btnStart = can.transform.GetChild(2).GetComponent<Button>();
+        btnStart.onClick.AddListener(StartGame);
+
+        //Start Button
+        btnStart.image.rectTransform.sizeDelta = new Vector2(can.GetComponent<RectTransform>().rect.width / 2, can.GetComponent<RectTransform>().rect.height / 15);
+        btnStart.gameObject.transform.position = new Vector3((can.GetComponent<RectTransform>().rect.width / 4) * 1, (btnStart.GetComponent<RectTransform>().rect.height / 2), 0);
+
+
+        //Position Set Button
+        btnSet.image.rectTransform.sizeDelta = new Vector2(can.GetComponent<RectTransform>().rect.width / 2, can.GetComponent<RectTransform>().rect.height / 15);
+        btnSet.gameObject.transform.position = new Vector3((can.GetComponent<RectTransform>().rect.width / 4) * 3, (btnSet.GetComponent<RectTransform>().rect.height / 2), 0);
+    }
+
+    async void placeTimer()
+    {
+        counter = 200;
+        if (taskRunning) return;
+        taskRunning = true;
+        while(counter <= 0)
+        {
+            await Task.Delay(100);
+            counter--;
+        }
+        changeMode();
+        taskRunning = false;
+        counter = 200;
+    }
+
+    void StartGame()
+    {
+        can.gameObject.SetActive(false);
     }
 }

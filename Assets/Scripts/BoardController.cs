@@ -17,8 +17,8 @@ public class BoardController : MonoBehaviour
     public GameObject gameOverPanel;
     public Text gameOverText;
     public GameObject restartButton;
+    public GameObject btnExit;
     private int moveCount;
-    private string[] fieldList = new string[9];
     
 
 
@@ -29,6 +29,13 @@ public class BoardController : MonoBehaviour
         currentMat = X_Mat;
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
+        btnExit.SetActive(false);
+
+        // EXIT BUTTON BEARBEITEN
+        //btnExit.GetComponent<Button>().onClick.AddListener(/**HIER DER METHODEN NAME**/);
+        
+        GameCanvasUI gcui = GameObject.Find("GameCanvas").GetComponent<GameCanvasUI>();
+        gcui.UpdateUI();
     }
 
     public void applyMove(GameObject field, GameObject selector)
@@ -108,6 +115,7 @@ public class BoardController : MonoBehaviour
         }
 
         restartButton.SetActive(true);
+        btnExit.SetActive(true);
     }
 
     void SwitchSide()
@@ -143,6 +151,7 @@ public class BoardController : MonoBehaviour
             playFields[i].GetComponent<CollisionDetection>().ResetGame();
         }
         restartButton.SetActive(false);
+        btnExit.SetActive(false);
     }
 
     public void setSelector(GameObject sel)
