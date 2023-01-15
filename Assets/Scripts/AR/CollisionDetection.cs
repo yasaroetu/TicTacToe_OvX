@@ -25,7 +25,7 @@ public class CollisionDetection : MonoBehaviour
         if (!filled)
         {
             elapsed += Time.deltaTime;
-            if (elapsed >= 1)
+            if (elapsed >= 2)
             {
                 parent.startSelection(this.gameObject, other.gameObject);
                 Debug.Log("Placed");
