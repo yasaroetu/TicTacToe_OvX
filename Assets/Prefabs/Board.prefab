@@ -262,6 +262,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 522239812238268982}
   gameOverText: {fileID: 522239812606302008}
   restartButton: {fileID: 522239813194795447}
+  btnExit: {fileID: 7320924706302205709}
 --- !u!1 &6743927063536747676
 GameObject:
   m_ObjectHideFlags: 0

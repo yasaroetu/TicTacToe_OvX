@@ -8,12 +8,12 @@ public class GameStart : MonoBehaviour
     
     public void OnClickPlayOnline()
     {
-        SceneManager.LoadScene("BlankAR 1");
+        SceneManager.LoadScene("AROnline");
     }
 
     public void OnClickPlayLocal()
     {
-        SceneManager.LoadScene("BlankAR");
+        SceneManager.LoadScene("ARLocal");
     }
 
 

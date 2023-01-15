@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BoardController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class BoardController : MonoBehaviour
     public GameObject restartButton;
     public GameObject btnExit;
     private int moveCount;
+    private bool lock_interaction = false;
     
 
 
@@ -32,22 +34,18 @@ public class BoardController : MonoBehaviour
         currentMat = X_Mat;
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
-<<<<<<< HEAD
-        
-        //CmdSpawnFields();
-=======
         btnExit.SetActive(false);
 
         // EXIT BUTTON BEARBEITEN
-        //btnExit.GetComponent<Button>().onClick.AddListener(/**HIER DER METHODEN NAME**/);
+        btnExit.GetComponent<Button>().onClick.AddListener(SwitchToMainMenue);
         
         GameCanvasUI gcui = GameObject.Find("GameCanvas").GetComponent<GameCanvasUI>();
         gcui.UpdateUI();
->>>>>>> UI
     }
 
     public void applyMove(int indexOfField)
     {
+        if (lock_interaction) return;
         Debug.Log("Board: the field i have to swap is : " + indexOfField);
         playFields[indexOfField].gameObject.GetComponent<MeshRenderer>().material = currentMat;
         playFields[indexOfField].gameObject.GetComponent<CollisionDetection>().setPlayer(playerSide);
@@ -122,7 +120,7 @@ public class BoardController : MonoBehaviour
     void GameOver(string winner)
     {
         //setBoardInteractable(false);
-
+        lock_interaction = true;
         if (winner == "draw")
         {
             Debug.Log("es war ein unentschieden");
@@ -132,6 +130,7 @@ public class BoardController : MonoBehaviour
         {
             setGameOverText(playerSide + " hat gewonnen! ");
         }
+
 
         restartButton.SetActive(true);
         btnExit.SetActive(true);
@@ -178,6 +177,7 @@ public class BoardController : MonoBehaviour
         }
         restartButton.SetActive(false);
         btnExit.SetActive(false);
+        lock_interaction = false;
         GameObject.Find("AR Session Origin").GetComponent<SpawnManager>().getSpawnManagerCanvas().gameObject.SetActive(true);
     }
 
@@ -201,113 +201,8 @@ public class BoardController : MonoBehaviour
         return fieldNumber;
     }
 
-    //[Command(requiresAuthority = false)]
-    //public void CmdApplyMove( GameObject selector)
-    //{
-    //    RpcApplyMove(selector);
-    //}
-
-    //[ClientRpc]
-    //public void RpcApplyMove( GameObject selector)
-    //{
-    //    currentField.gameObject.GetComponent<MeshRenderer>().material = currentMat;
-    //    currentField.gameObject.GetComponent<CollisionDetection>().setPlayer(playerSide);
-    //    EndTurn();
-    //}
-
-    //[Command(requiresAuthority = false)]
-    //public void CmdSpawnFields()
-    //{
-    //    var field = Instantiate(playFieldPrefab);
-    //    playFields[0] = field;
-    //    field.transform.position += new Vector3(-20, 20, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[1] = field;
-    //    field.transform.position += new Vector3(0, 20, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[2] = field;
-    //    field.transform.position += new Vector3(20, 20, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[3] = field;
-    //    field.transform.position += new Vector3(-20, 0, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[4] = field;
-    //    field.transform.position += new Vector3(0, 0, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[5] = field;
-    //    field.transform.position += new Vector3(20, 0, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[6] = field;
-    //    field.transform.position += new Vector3(-20, -20, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[7] = field;
-    //    field.transform.position += new Vector3(0, -20, 0);
-    //    NetworkServer.Spawn(field);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[8] = field;
-    //    field.transform.position += new Vector3(20, -20, 0);
-    //    NetworkServer.Spawn(field);
-
-
-    //    foreach (GameObject item in playFields)
-    //    {
-    //        NetworkServer.Spawn(item);
-    //    }
-    //}
-
-    //[ClientRpc]
-    //public void RpcSpawnFields()
-    //{
-    //    var field = Instantiate(playFieldPrefab);
-    //    playFields[0] = field;
-    //    field.transform.position += new Vector3(-20, 20, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[1] = field;
-    //    field.transform.position += new Vector3(0, 20, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[2] = field;
-    //    field.transform.position += new Vector3(20, 20, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[3] = field;
-    //    field.transform.position += new Vector3(-20, 0, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[4] = field;
-    //    field.transform.position += new Vector3(0, 0, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[5] = field;
-    //    field.transform.position += new Vector3(20, 0, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[6] = field;
-    //    field.transform.position += new Vector3(-20, -20, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[7] = field;
-    //    field.transform.position += new Vector3(0, -20, 0);
-    //    field = Instantiate(playFieldPrefab);
-    //    playFields[8] = field;
-    //    field.transform.position += new Vector3(20, -20, 0);
-
-
-    //}
-
-    //[Command(requiresAuthority = false)]
-    //public void CmdSpawn()
-    //{
-    //    foreach(GameObject field in playFields)
-    //    {
-    //        NetworkServer.Spawn(field);
-    //    }
-    //}
-
-    //[Command(requiresAuthority = false)]
-    //public void CmdSetCurrentField(GameObject field)
-    //{
-    //    currentField = field;
-    //}
+    private void SwitchToMainMenue()
+    {
+        SceneManager.LoadScene("GameStart");
+    }
 }
