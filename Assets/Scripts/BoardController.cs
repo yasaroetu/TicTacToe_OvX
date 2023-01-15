@@ -20,8 +20,8 @@ public class BoardController : MonoBehaviour
     public GameObject gameOverPanel;
     public Text gameOverText;
     public GameObject restartButton;
+    public GameObject btnExit;
     private int moveCount;
-    private string[] fieldList = new string[9];
     
 
 
@@ -32,8 +32,18 @@ public class BoardController : MonoBehaviour
         currentMat = X_Mat;
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
+<<<<<<< HEAD
         
         //CmdSpawnFields();
+=======
+        btnExit.SetActive(false);
+
+        // EXIT BUTTON BEARBEITEN
+        //btnExit.GetComponent<Button>().onClick.AddListener(/**HIER DER METHODEN NAME**/);
+        
+        GameCanvasUI gcui = GameObject.Find("GameCanvas").GetComponent<GameCanvasUI>();
+        gcui.UpdateUI();
+>>>>>>> UI
     }
 
     public void applyMove(int indexOfField)
@@ -124,6 +134,7 @@ public class BoardController : MonoBehaviour
         }
 
         restartButton.SetActive(true);
+        btnExit.SetActive(true);
     }
 
     void SwitchSide()
@@ -166,6 +177,8 @@ public class BoardController : MonoBehaviour
             playFields[i].GetComponent<CollisionDetection>().ResetGame();
         }
         restartButton.SetActive(false);
+        btnExit.SetActive(false);
+        GameObject.Find("AR Session Origin").GetComponent<SpawnManager>().getSpawnManagerCanvas().gameObject.SetActive(true);
     }
 
     public void setSelector(GameObject sel)
